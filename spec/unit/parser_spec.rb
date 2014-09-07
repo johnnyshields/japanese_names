@@ -32,11 +32,22 @@ describe JapaneseNames::Parser do
       end
     end
 
-    [['XXX','XXX','XXX', 'XXX']].each do |kanji_fam, kanji_giv, kana_fam, kana_giv|
+    [['XXX','XXX','XXX','XXX']].each do |kanji_fam, kanji_giv, kana_fam, kana_giv|
       it "should return nil for invalid name #{kanji_fam+kanji_giv} #{kana_fam+kana_giv}" do
         result = subject.split(kanji_fam+kanji_giv, kana_fam+kana_giv)
         result.should be_nil
       end
+    end
+
+    it 'should strip leading/trailing whitespace' do
+      subject.split(' 上原望 ', ' ウエハラノゾミ ').should eq [['上原','望'],['ウエハラ','ノゾミ']]
+      subject.split_giv(' 上原望 ', ' ウエハラノゾミ ').should eq [['上原','望'],['ウエハラ','ノゾミ']]
+      subject.split_fam(' 上原望 ', ' ウエハラノゾミ ').should eq [['上原','望'],['ウエハラ','ノゾミ']]
+    end
+
+    it 'should return nil for nil input' do
+      subject.split(nil, 'ウエハラノゾミ').should be_nil
+      subject.split('上原望', nil).should be_nil
     end
   end
 end

@@ -18,6 +18,8 @@ module JapaneseNames
     end
 
     def split_giv(kanji, kana)
+      return nil unless kanji && kana
+      kanji, kana = kanji.strip, kana.strip
       dict = Enamdict.match(kanji: window_right(kanji))
       dict.sort!{|x,y| y[0].size <=> x[0].size}
       kana_match = nil
@@ -27,6 +29,8 @@ module JapaneseNames
     end
 
     def split_fam(kanji, kana)
+      return nil unless kanji && kana
+      kanji, kana = kanji.strip, kana.strip
       dict = Enamdict.match(kanji: window_left(kanji))
       dict.sort!{|x,y| y[0].size <=> x[0].size}
       kana_match = nil
@@ -61,16 +65,16 @@ module JapaneseNames
 
     # Given a String, returns an array of progressively smaller substrings anchored on the left side.
     #
-    # Example: window_left("abcde") #=>  ["abcd", "abc", "ab", "a"]
+    # Example: window_left("abcd")  #=> ["abcd", "abc", "ab", "a"]
     def window_left(str)
-      (0..str.size-2).to_a.reverse.map{|i| str[0..i]}
+      (0...str.size).to_a.reverse.map{|i| str[0..i]}
     end
 
     # Given a String, returns an array of progressively smaller substrings anchored on the right side.
     #
-    # Example: window_right("abcde") #=>  ["bcde", "cde", "de", "e"]
+    # Example: window_right("abcd")  #=> ["abcd", "bcd", "cd", "d"]
     def window_right(str)
-      (1..str.size-1).map{|i| str[i..-1]}
+      (0...str.size).map{|i| str[i..-1]}
     end
   end
 end
