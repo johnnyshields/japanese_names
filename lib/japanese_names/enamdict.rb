@@ -18,7 +18,8 @@ module JapaneseNames
 
     class << self
 
-      # Public: Matches kanji and/or kana regex strings in the dictionary.
+      # Public: Finds kanji and/or kana regex strings in the dictionary via
+      # a structured query interface.
       #
       # opts - The Hash options used to match the dictionary (default: {}):
       #        kanji: Regex to match kanji name (optional)
@@ -26,7 +27,7 @@ module JapaneseNames
       #        flags: Flag or Array of flags to filter the match (optional)
       #
       # Returns the dict entries as an Array of Arrays [[kanji, kana, flags], ...]
-      def match(opts={})
+      def find(opts={})
         return [] unless opts[:kanji] || opts[:kana]
 
         kanji = name_regex opts.delete(:kanji)
@@ -34,14 +35,14 @@ module JapaneseNames
         flags = flags_regex opts.delete(:flags)
         regex = /^#{kanji}\|#{kana}\|#{flags}$/
 
-        search{|line| line[regex]}
+        match{|line| line[regex]}
       end
 
-      # Public: Selects entries in the enamdict based on a block which should
+      # Public: Matches entries in the enamdict based on a block which should
       # evaluate true or false (typically a regex).
       #
       # Returns the dict entries as an Array of Arrays [[kanji, kana, flags], ...]
-      def search(&block)
+      def match(&block)
         sel = []
         each_line do |line|
           if block.call(line)
