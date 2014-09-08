@@ -1,10 +1,10 @@
 # JapaneseNames
 
-Japanese name parser based on ENAMDIC
-
-## Overview
-
 JapaneseNames provides an interface to the [ENAMDIC file](http://www.csse.monash.edu.au/~jwb/enamdict_doc.html).
+
+## JapaneseNames::Parser
+
+### Parser#split
 
 Currently the main method is `split` which, given a kanji and kana representation of a name splits
 into to family/given names.
@@ -13,6 +13,62 @@ into to family/given names.
   parser = JapaneseNames::Parser.new
   parser.split('堺雅美', 'さかいマサミ')  #=> [['堺', '雅美'], ['さかい', 'マサミ']]
 ```
+
+The logic is as follows:
+
+* Step 1: Split kanji name into possible last name sub-strings
+
+   ```
+   上原亜沙子 => 
+
+   上原亜沙子
+   上原亜沙
+   上原亜
+   上原
+   上
+   ```
+
+* Step 2: Lookup possible kana matches in dictionary (done in a single pass)
+
+   ```
+   上原亜沙子 => X
+   上原亜沙　 => X
+   上原亜　　 => X
+   上原　　　 => かみはら　かみばら　うえはら うえばら...
+   上　　　　 => かみ　うえ ...
+   ```
+
+* Step 3: Compare kana lookups versus kana name and detect first match (starting from longest candidate string)
+
+   ```
+   うえはらあさこ contains かみはら ? => X
+   うえはらあさこ contains かみばら ? => X
+   うえはらあさこ contains うえはら ? => YES! [うえはら]あさこ
+   ```
+
+* Step 4: If match found, split names accordingly
+
+   ```
+   [上原]亜沙子  => 上原 亜沙子
+   [うえはら]あさこ => うえはら あさこ
+   ```
+
+* Step 5: If match not found, repeat steps 1-4 in reverse for FIRST name:
+
+   ```
+   上原亜沙子 => 
+
+   上原亜沙子 => X
+   　原亜沙子 => X
+   　　亜沙子 => あさこ
+   　　　沙子 => さこ
+   　　　　子 => こ
+
+   上原[亜沙子]  => 上原 亜沙子
+   うえはら[あさこ] => うえはら あさこ
+   ```
+
+* Step 6: If match still not found, return `nil`
 
 
 ## ENAMDICT
