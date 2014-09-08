@@ -95,6 +95,12 @@ implementation of the dictionary would be nice.
 Fork -> Commit -> Spec -> Push -> Pull Request
 
 
+## Similar Projects
+
+* Marco Bresciani's [wwwwjdic](https://rubygems.org/gems/wwwjdic) gem which is **NOT** used by this lib
+* [@jeresig](https://github.com/jeresig)'s [node-enamdict](https://github.com/jeresig/node-enamdict) an ENAMDIC reader for Node.js
+
+
 ## Authors
 
 * [@johnnyshields](https://github.com/johnnyshields)
