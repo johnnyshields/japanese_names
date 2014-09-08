@@ -19,8 +19,8 @@ Provides a structured query interface to access ENAMDICT data.
    JapaneseNames::Enamdict.find(kanji: '外世子')  #=> [["外世子", "とよこ", "f"]]
 
    JapaneseNames::Enamdict.find(kana: 'ならしま', flags: 's')  #=> [["奈良島", "ならしま", "s"],
-                                                                      ["楢島", "ならしま", "s"],
-                                                                      ["楢嶋", "ならしま", "s"]]
+                                                                # ["楢島", "ならしま", "s"],
+                                                                # ["楢嶋", "ならしま", "s"]]
 
    JapaneseNames::Enamdict.find(kanji: '楢二郎', kana: 'ならじろう')  #=> [["楢二郎", "ならじろう", "m"]]
    ```
