@@ -25,7 +25,7 @@ into to family/given names.
 
 The logic is as follows:
 
-* Step 1: Split kanji name into possible last name sub-strings
+* Step 1: Split kanji name into possible surname sub-strings
 
    ```
    上原亜沙子 => 
@@ -62,7 +62,7 @@ The logic is as follows:
    [うえはら]あさこ => うえはら あさこ
    ```
 
-* Step 5: If match not found, repeat steps 1-4 in reverse for FIRST name:
+* Step 5: If match not found, repeat steps 1-4 in reverse for given name:
 
    ```
    上原亜沙子 => 
