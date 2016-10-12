@@ -9,7 +9,7 @@ module JapaneseNames
         backend.find(opts)
       end
 
-      protected
+      private
 
       # Internal: Builds regex criteria for name.
       def backend

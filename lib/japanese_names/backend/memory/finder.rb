@@ -24,7 +24,7 @@ module Memory
         end
       end
 
-      protected
+      private
 
       def store
         ::JapaneseNames::Backend::Memory::Store.store

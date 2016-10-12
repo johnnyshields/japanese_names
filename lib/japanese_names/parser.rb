@@ -41,7 +41,7 @@ module JapaneseNames
     # TODO: add option to strip honorific '様'
     # TODO: add option to infer sex (0 = unknown, 1 = male, 2 = female as per ISO/IEC 5218)
 
-    protected
+    private
 
     # Returns a regex string which matches both hiragana and katakana variations of a String.
     def hk(str)
