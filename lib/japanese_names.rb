@@ -9,6 +9,11 @@ require 'japanese_names/parser'
 require 'japanese_names/backend/memory/store'
 require 'japanese_names/backend/memory/finder'
 
+if defined?(::Mongoid::Document)
+  require 'japanese_names/backend/mongoid/row'
+  require 'japanese_names/backend/mongoid/finder'
+end
+
 module JapaneseNames
   def self.root
     File.join(File.dirname(__FILE__), '../')
