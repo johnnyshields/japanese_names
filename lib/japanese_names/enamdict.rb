@@ -9,9 +9,9 @@ module JapaneseNames
     # g - given name, as-yet not classified by sex (64,600)
     # f - female given name (106,300)
     # m - male given name (14,500)
-    NAME_FAM = %w(s p u)
-    NAME_GIV = %w(u g f m)
-    NAME_ANY = NAME_FAM | NAME_GIV
+    NAME_FAM = %w(s p u).freeze
+    NAME_GIV = %w(u g f m).freeze
+    NAME_ANY = (NAME_FAM | NAME_GIV).freeze
 
     class << self
 
@@ -61,12 +61,11 @@ module JapaneseNames
 
       # Internal: Builds regex criteria for flags.
       def flags_regex(flags)
-        if !flags || flags == NAME_ANY
-          nil
-        elsif flags.is_a?(Array)
-          /[#{flags.join}]/
-        else
-          /[#{flags}]/
+        case flags
+          when NAME_ANY then nil
+          when Array then /[#{flags.join}]/
+          when String then /[#{flags}]/
+          else nil
         end
       end
     end
