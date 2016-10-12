@@ -17,7 +17,7 @@ module JapaneseNames
     def split_giv(kanji, kana)
       return nil unless kanji && kana
       kanji, kana = kanji.strip, kana.strip
-      dict = Enamdict.find(kanji: window_right(kanji))
+      dict = Finder.find(kanji: window_right(kanji))
       dict.sort!{|x,y| y[0].size <=> x[0].size}
       kana_match = nil
       if match = dict.detect{|m| kana_match = kana[/#{hk m[1]}$/]}
@@ -29,7 +29,7 @@ module JapaneseNames
     def split_sur(kanji, kana)
       return nil unless kanji && kana
       kanji, kana = kanji.strip, kana.strip
-      dict = Enamdict.find(kanji: window_left(kanji))
+      dict = Finder.find(kanji: window_left(kanji))
       dict.sort!{|x,y| y[0].size <=> x[0].size}
       kana_match = nil
       if match = dict.detect{|m| kana_match = kana[/^#{hk m[1]}/]}

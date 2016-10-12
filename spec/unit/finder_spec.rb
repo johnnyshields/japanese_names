@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe JapaneseNames::Enamdict do
+describe JapaneseNames::Finder do
 
-  subject { JapaneseNames::Enamdict }
+  subject { JapaneseNames::Finder }
 
   describe '#find' do
 
