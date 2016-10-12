@@ -1,6 +1,6 @@
 # CHANGELOG
 
-#### 0.0.4
+#### 0.1.0
 
 - BREAKING CHANGE: Rename Parser to Splitter.
 - BREAKING CHANGE: Make Finder a class.
