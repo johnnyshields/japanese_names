@@ -30,7 +30,7 @@ where options are:
 * `kanji`: The kanji name string to match. Regex syntax suppported. Either `:kanji` or `:kana` must be specified.
 * `kana`:  The kana name string to match. Regex syntax suppported.
 * `flags`: The flag char or array of flag chars to match. Refer to [ENAMDIC documentation](http://www.csse.monash.edu.au/~jwb/enamdict_doc.html).
-Additionally constants `JapaneseNames::Enamdict::NAME_FAM` and `JapaneseNames::Enamdict::NAME_GIV` may be used.
+Additionally constants `JapaneseNames::Enamdict::NAME_SURNAME` and `JapaneseNames::Enamdict::NAME_GIVEN` may be used.
 
 Note that romaji data has been removed from our `enamdict.min` file in the compression step. We recommend to use a gem such as `mojinizer` to convert romaji to kana before doing a query.
 
