@@ -17,11 +17,11 @@ module JapaneseNames
     def split_giv(kanji, kana)
       return nil unless kanji && kana
       kanji, kana = kanji.strip, kana.strip
-      dict = Finder.find(kanji: window_right(kanji))
+      dict = Finder.find(kanji: StringUtil.ngrams_right(kanji))
       dict.sort!{|x,y| y[0].size <=> x[0].size}
       kana_match = nil
       if match = dict.detect{|m| kana_match = kana[/#{hk m[1]}$/]}
-        return [[mask_right(kanji, match[0]), match[0]],[mask_right(kana, kana_match), kana_match]]
+        return [[StringUtil.mask_right(kanji, match[0]), match[0]],[StringUtil.mask_right(kana, kana_match), kana_match]]
       end
     end
     alias :split_given :split_giv
@@ -29,11 +29,11 @@ module JapaneseNames
     def split_sur(kanji, kana)
       return nil unless kanji && kana
       kanji, kana = kanji.strip, kana.strip
-      dict = Finder.find(kanji: window_left(kanji))
+      dict = Finder.find(kanji: StringUtil.ngrams_left(kanji))
       dict.sort!{|x,y| y[0].size <=> x[0].size}
       kana_match = nil
       if match = dict.detect{|m| kana_match = kana[/^#{hk m[1]}/]}
-        return [[match[0], mask_left(kanji, match[0])],[kana_match, mask_left(kana, kana_match)]]
+        return [[match[0], StringUtil.mask_left(kanji, match[0])],[kana_match, StringUtil.mask_left(kana, kana_match)]]
       end
     end
     alias :split_surname :split_sur
@@ -46,34 +46,6 @@ module JapaneseNames
     # Returns a regex string which matches both hiragana and katakana variations of a String.
     def hk(str)
       "(?:#{Moji.kata_to_hira(str)}|#{Moji.hira_to_kata(str)})"
-    end
-
-    # Masks a String from the left side and returns the remaining (right) portion of the String.
-    #
-    # Example: mask_left("abcde", "ab") #=> "cde"
-    def mask_left(str, mask)
-      str.gsub(/^#{mask}/, '')
-    end
-
-    # Masks a String from the right side and returns the remaining (left) portion of the String.
-    #
-    # Example:  mask_right("abcde", "de") #=> "abc"
-    def mask_right(str, mask)
-      str.gsub(/#{mask}$/, '')
-    end
-
-    # Given a String, returns an array of progressively smaller substrings anchored on the left side.
-    #
-    # Example: window_left("abcd")  #=> ["abcd", "abc", "ab", "a"]
-    def window_left(str)
-      (0...str.size).to_a.reverse.map{|i| str[0..i]}
-    end
-
-    # Given a String, returns an array of progressively smaller substrings anchored on the right side.
-    #
-    # Example: window_right("abcd")  #=> ["abcd", "bcd", "cd", "d"]
-    def window_right(str)
-      (0...str.size).map{|i| str[i..-1]}
     end
   end
 end

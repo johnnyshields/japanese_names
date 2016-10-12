@@ -6,6 +6,7 @@ require 'japanese_names/version'
 require 'japanese_names/enamdict'
 require 'japanese_names/finder'
 require 'japanese_names/parser'
+require 'japanese_names/string_util'
 require 'japanese_names/backend/memory/store'
 require 'japanese_names/backend/memory/finder'
 
