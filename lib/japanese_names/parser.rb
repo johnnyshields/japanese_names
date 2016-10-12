@@ -1,6 +1,3 @@
-#!/bin/env ruby
-# encoding: utf-8
-
 module JapaneseNames
 
   # Provides methods for parsing Japanese name strings.

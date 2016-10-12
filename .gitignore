@@ -18,3 +18,4 @@
 .ruby-gemset
 .rvmrc
 /.idea
+Gemfile.lock

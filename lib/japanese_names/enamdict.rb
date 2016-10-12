@@ -1,6 +1,3 @@
-#!/bin/env ruby
-# encoding: utf-8
-
 module JapaneseNames
 
   # Query interface for the ENAMDICT file (http://www.csse.monash.edu.au/~jwb/enamdict_doc.html)
@@ -56,19 +53,20 @@ module JapaneseNames
 
       # Internal: Returns the filepath to the enamdict.min file.
       def filepath
-        File.join(File.dirname(__FILE__), '../../bin/enamdict.min')
+        File.join(JapaneseNames.root, 'bin/enamdict.min')
       end
 
       # Internal: The memoized dictionary instance.
       def dict
-        return @dict if @dict
-        @dict = []
-        File.open(self.filepath, 'r:utf-8') do |f|
-          while(line = f.gets) != nil
-            @dict << line[0..-2] # omit trailing newline char
+        @dict ||= begin
+          ary = []
+          File.open(self.filepath, 'r:utf-8') do |f|
+            while(line = f.gets) != nil
+              ary << line[0..-2] # omit trailing newline char
+            end
           end
-        end
-        @dict.freeze
+          ary
+        end.freeze
       end
 
       # Internal: Calls the given block for each line in the dict.
