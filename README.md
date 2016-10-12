@@ -1,28 +1,28 @@
 # JapaneseNames
 
-JapaneseNames provides an interface to the [ENAMDIC file](http://www.csse.monash.edu.au/~jwb/enamdict_doc.html).
+JapaneseNames provides an interface to the [T file](http://www.csse.monash.edu.au/~jwb/enamdict_doc.html).
 
 
-## JapaneseNames::Enamdict
+## ENAMDICT
 
-This library comes packaged with a compacted version of the [ENAMDIC file](http://www.csse.monash.edu.au/~jwb/enamdict_doc.html)
+This library comes packaged with a compacted version of the [ENAMDICT file](http://www.csse.monash.edu.au/~jwb/enamdict_doc.html)
 at `bin/enamdict.min`. Refer to *Rake Tasks* below for how this file is constructed.
 
-`JapaneseNames::Enamdict` is a module; all methods are called on the module `self` class.
 
-
-### Enamdict.find
+### Finder.find
 
 Provides a structured query interface to access ENAMDICT data.
 
    ```ruby
-   JapaneseNames::Enamdict.find(kanji: '外世子')  #=> [["外世子", "とよこ", "f"]]
+   finder = JapaneseNames::Finder.new
+   
+   finder.find(kanji: '外世子')  #=> [["外世子", "とよこ", "f"]]
 
-   JapaneseNames::Enamdict.find(kana: 'ならしま', flags: 's')  #=> [["奈良島", "ならしま", "s"],
-                                                             #    ["楢島", "ならしま", "s"],
-                                                             #    ["楢嶋", "ならしま", "s"]]
+   finder.find(kana: 'ならしま', flags: 's')  #=> [["奈良島", "ならしま", "s"],
+                                            #    ["楢島", "ならしま", "s"],
+                                            #    ["楢嶋", "ならしま", "s"]]
 
-   JapaneseNames::Enamdict.find(kanji: '楢二郎', kana: 'ならじろう')  #=> [["楢二郎", "ならじろう", "m"]]
+   finder.find(kanji: '楢二郎', kana: 'ならじろう')  #=> [["楢二郎", "ならじろう", "m"]]
    ```
 
 where options are:
@@ -35,31 +35,16 @@ Additionally constants `JapaneseNames::Enamdict::NAME_SURNAME` and `JapaneseName
 Note that romaji data has been removed from our `enamdict.min` file in the compression step. We recommend to use a gem such as `mojinizer` to convert romaji to kana before doing a query.
 
 
-### Enamdict.match
+## JapaneseNames::Splitter
 
-Provides a raw interface to match ENAMDICT entries via a block, which would typically contain a `Regexp` expression:
-
-   ```ruby
-   JapaneseNames::Enamdict.match{|entry| entry =~ /^堺|/}  #=> [["堺", "さかい", "p,s"], ["堺", "さかえ", "p"]]
-   ```
-
-where each dictionary entry is in the format below (different from raw ENAMDICT file):
-
-   ```
-   kanji|kana|flag1(,flag2,...)
-   ```
-
-
-## JapaneseNames::Parser
-
-### Parser#split
+### Splitter#split
 
 Currently the main method is `split` which, given a kanji and kana representation of a name splits
 into to family/given names.
 
    ```ruby
-   parser = JapaneseNames::Parser.new
-   parser.split('堺雅美', 'さかいマサミ')  #=> [['堺', '雅美'], ['さかい', 'マサミ']]
+   splitter = JapaneseNames::Splitter.new
+   splitter.split('堺雅美', 'さかいマサミ')  #=> [['堺', '雅美'], ['さかい', 'マサミ']]
    ```
 
 The logic is as follows:

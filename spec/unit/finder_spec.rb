@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe JapaneseNames::Finder do
 
-  subject { JapaneseNames::Finder }
+  subject { described_class.new }
 
   describe '#find' do
 

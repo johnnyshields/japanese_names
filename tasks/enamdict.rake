@@ -1,6 +1,3 @@
-#!/bin/env ruby
-# encoding: utf-8
-
 namespace :enamdict do
 
   desc 'Downloads and compacts the ENAMDICT file'
@@ -25,12 +22,12 @@ namespace :enamdict do
   end
 
   # Minification steps:
-  # - Encode file as UTF-8 (technically ~25% larger than Japanese encodings, but easier to work with)
+  # - Encode file as UTF-8 (increases size by ~25%)
   # - Filter out non-human name dictionary entries
-  # - Removes Romaji from string (redundant with hiragana/katakana)
+  # - Remove Romaji from string (redundant with kana)
   # - Uses pipe '|' char as delimiter
-  # - Sets kana value to kanji value if kana not specified (increases size by ~10% but simplifies parsing)
-  # - Resultant file is approx 40% of original filesize
+  # - Sets kana value to kanji value if kana not specified (increases size by ~10%)
+  # - Output file is approx 40% of original filesize
   #
   # Format of minified file:
   #

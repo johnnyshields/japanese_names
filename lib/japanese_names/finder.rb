@@ -1,20 +1,21 @@
 module JapaneseNames
 
-  # Query interface for the
-  module Finder
+  # Query interface for ENAMDICT
+  class Finder
 
-    class << self
+    # Hash opts
+    # - kanji: String kanji to match
+    # - kana:  String kana to match
+    # - kanji: Array<Symbol> ENAMDICT flags to match
+    def find(opts={})
+      backend.find(opts)
+    end
 
-      def find(opts={})
-        backend.find(opts)
-      end
+    private
 
-      private
-
-      # Internal: Builds regex criteria for name.
-      def backend
-        ::JapaneseNames::Backend::Memory::Finder
-      end
+    # Internal: Builds regex criteria for name.
+    def backend
+      ::JapaneseNames::Backend::Memory::Finder
     end
   end
 end

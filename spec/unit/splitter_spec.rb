@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe JapaneseNames::Parser do
+describe JapaneseNames::Splitter do
 
-  subject { JapaneseNames::Parser.new }
+  subject { described_class.new }
 
   describe '#split' do
 

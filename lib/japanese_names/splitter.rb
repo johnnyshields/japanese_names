@@ -1,7 +1,7 @@
 module JapaneseNames
 
-  # Provides methods for parsing Japanese name strings.
-  class Parser
+  # Provides methods to split a full Japanese name strings into surname and given name.
+  class Splitter
 
     # Given a kanji and kana representation of a name splits into to family/given names.
     #
@@ -17,10 +17,10 @@ module JapaneseNames
     def split_giv(kanji, kana)
       return nil unless kanji && kana
       kanji, kana = kanji.strip, kana.strip
-      dict = Finder.find(kanji: Util::Ngram.ngram_right(kanji))
+      dict = finder.find(kanji: Util::Ngram.ngram_right(kanji))
       dict.sort!{|x,y| y[0].size <=> x[0].size}
       kana_match = nil
-      if match = dict.detect{|m| kana_match = kana[/#{hk m[1]}$/]}
+      if match = dict.detect{|m| kana_match = kana[/#{hk m[1]}\z/]}
         return [[Util::Ngram.mask_right(kanji, match[0]), match[0]],[Util::Ngram.mask_right(kana, kana_match), kana_match]]
       end
     end
@@ -29,10 +29,10 @@ module JapaneseNames
     def split_sur(kanji, kana)
       return nil unless kanji && kana
       kanji, kana = kanji.strip, kana.strip
-      dict = Finder.find(kanji: Util::Ngram.ngram_left(kanji))
+      dict = finder.find(kanji: Util::Ngram.ngram_left(kanji))
       dict.sort!{|x,y| y[0].size <=> x[0].size}
       kana_match = nil
-      if match = dict.detect{|m| kana_match = kana[/^#{hk m[1]}/]}
+      if match = dict.detect{|m| kana_match = kana[/\A#{hk m[1]}/]}
         return [[match[0], Util::Ngram.mask_left(kanji, match[0])],[kana_match, Util::Ngram.mask_left(kana, kana_match)]]
       end
     end
@@ -46,6 +46,10 @@ module JapaneseNames
     # Returns a regex string which matches both hiragana and katakana variations of a String.
     def hk(str)
       "(?:#{Moji.kata_to_hira(str)}|#{Moji.hira_to_kata(str)})"
+    end
+
+    def finder
+      @finder ||= Finder.new
     end
   end
 end
