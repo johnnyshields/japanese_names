@@ -4,23 +4,6 @@ describe JapaneseNames::Enamdict do
 
   subject { JapaneseNames::Enamdict }
 
-  describe '#match' do
-
-    it 'should select only lines which match criteria' do
-      result = subject.match{|line| line =~ /^.+?\|あわのはら\|.+?$/}
-      result.should eq [["粟野原", "あわのはら", "s"]]
-    end
-
-    it 'should select multiple lines' do
-      result = subject.match{|line| line =~ /^.+?\|はしの\|.+?$/}
-      result.should eq [["橋之", "はしの", "p"],
-                        ["橋埜", "はしの", "s"],
-                        ["橋野", "はしの", "s"],
-                        ["端野", "はしの", "s"],
-                        ["箸野", "はしの", "s"]]
-    end
-  end
-
   describe '#find' do
 
     it 'should match kanji only' do
