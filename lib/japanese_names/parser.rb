@@ -11,7 +11,7 @@ module JapaneseNames
     # Returns Array [[kanji_fam, kanji_giv], [kana_fam, kana_giv]] if there was a match.
     # Returns nil if there was no match.
     def split(kanji, kana)
-      split_fam(kanji, kana) || split_giv(kanji, kana)
+      split_surname(kanji, kana) || split_given(kanji, kana)
     end
 
     def split_giv(kanji, kana)
@@ -24,8 +24,9 @@ module JapaneseNames
         return [[mask_right(kanji, match[0]), match[0]],[mask_right(kana, kana_match), kana_match]]
       end
     end
+    alias :split_given :split_giv
 
-    def split_fam(kanji, kana)
+    def split_sur(kanji, kana)
       return nil unless kanji && kana
       kanji, kana = kanji.strip, kana.strip
       dict = Enamdict.find(kanji: window_left(kanji))
@@ -35,6 +36,7 @@ module JapaneseNames
         return [[match[0], mask_left(kanji, match[0])],[kana_match, mask_left(kana, kana_match)]]
       end
     end
+    alias :split_surname :split_sur
 
     # TODO: add option to strip honorific '様'
     # TODO: add option to infer sex (0 = unknown, 1 = male, 2 = female as per ISO/IEC 5218)

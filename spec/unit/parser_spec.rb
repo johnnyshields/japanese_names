@@ -24,7 +24,7 @@ describe JapaneseNames::Parser do
       end
 
       it "should parse #{kanji_fam+kanji_giv} #{kana_fam+kana_giv} by family name" do
-        result = subject.split_fam(kanji_fam+kanji_giv, kana_fam+kana_giv)
+        result = subject.split_sur(kanji_fam+kanji_giv, kana_fam+kana_giv)
         result.should eq [[kanji_fam, kanji_giv], [kana_fam, kana_giv]]
       end
     end
@@ -39,7 +39,7 @@ describe JapaneseNames::Parser do
     it 'should strip leading/trailing whitespace' do
       subject.split(' 上原望 ', ' ウエハラノゾミ ').should eq [['上原','望'],['ウエハラ','ノゾミ']]
       subject.split_giv(' 上原望 ', ' ウエハラノゾミ ').should eq [['上原','望'],['ウエハラ','ノゾミ']]
-      subject.split_fam(' 上原望 ', ' ウエハラノゾミ ').should eq [['上原','望'],['ウエハラ','ノゾミ']]
+      subject.split_sur(' 上原望 ', ' ウエハラノゾミ ').should eq [['上原','望'],['ウエハラ','ノゾミ']]
     end
 
     it 'should return nil for nil input' do
