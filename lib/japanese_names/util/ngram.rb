@@ -1,28 +1,29 @@
 module JapaneseNames
+module Util
 
   # Provides methods for parsing Japanese name strings.
-  class StringUtil
+  class Ngram
 
     class << self
 
       # Given a String, returns an ordered array of all possible substrings.
       #
-      # Example: ngrams_right("abcd")  #=> ["abcd", "abc", "bcd", "ab", "bc", "cd", "a", "b", "c", "d"]
-      def ngrams(str)
+      # Example: ngram_right("abcd")  #=> ["abcd", "abc", "bcd", "ab", "bc", "cd", "a", "b", "c", "d"]
+      def ngram(str)
         (0...str.size).to_a.reverse.map{|i| (0...(str.size-i)).map{|j| str[j..(i+j)]}}.flatten.uniq
       end
 
       # Given a String, returns an array of progressively smaller substrings anchored on the left side.
       #
-      # Example: ngrams_left("abcd")  #=> ["abcd", "abc", "ab", "a"]
-      def ngrams_left(str)
+      # Example: ngram_left("abcd")  #=> ["abcd", "abc", "ab", "a"]
+      def ngram_left(str)
         (0...str.size).to_a.reverse.map{|i| str[0..i]}
       end
 
       # Given a String, returns an array of progressively smaller substrings anchored on the right side.
       #
-      # Example: ngrams_right("abcd")  #=> ["abcd", "bcd", "cd", "d"]
-      def ngrams_right(str)
+      # Example: ngram_right("abcd")  #=> ["abcd", "bcd", "cd", "d"]
+      def ngram_right(str)
         (0...str.size).map{|i| str[i..-1]}
       end
 
@@ -41,4 +42,5 @@ module JapaneseNames
       end
     end
   end
+end
 end

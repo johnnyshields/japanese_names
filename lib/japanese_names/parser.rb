@@ -17,11 +17,11 @@ module JapaneseNames
     def split_giv(kanji, kana)
       return nil unless kanji && kana
       kanji, kana = kanji.strip, kana.strip
-      dict = Finder.find(kanji: StringUtil.ngrams_right(kanji))
+      dict = Finder.find(kanji: Util::Ngram.ngram_right(kanji))
       dict.sort!{|x,y| y[0].size <=> x[0].size}
       kana_match = nil
       if match = dict.detect{|m| kana_match = kana[/#{hk m[1]}$/]}
-        return [[StringUtil.mask_right(kanji, match[0]), match[0]],[StringUtil.mask_right(kana, kana_match), kana_match]]
+        return [[Util::Ngram.mask_right(kanji, match[0]), match[0]],[Util::Ngram.mask_right(kana, kana_match), kana_match]]
       end
     end
     alias :split_given :split_giv
@@ -29,11 +29,11 @@ module JapaneseNames
     def split_sur(kanji, kana)
       return nil unless kanji && kana
       kanji, kana = kanji.strip, kana.strip
-      dict = Finder.find(kanji: StringUtil.ngrams_left(kanji))
+      dict = Finder.find(kanji: Util::Ngram.ngram_left(kanji))
       dict.sort!{|x,y| y[0].size <=> x[0].size}
       kana_match = nil
       if match = dict.detect{|m| kana_match = kana[/^#{hk m[1]}/]}
-        return [[match[0], StringUtil.mask_left(kanji, match[0])],[kana_match, StringUtil.mask_left(kana, kana_match)]]
+        return [[match[0], Util::Ngram.mask_left(kanji, match[0])],[kana_match, Util::Ngram.mask_left(kana, kana_match)]]
       end
     end
     alias :split_surname :split_sur
