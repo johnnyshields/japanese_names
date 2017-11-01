@@ -20,6 +20,10 @@ Metrics/BlockLength:
 Metrics/CyclomaticComplexity:
   Enabled: false
 
+Metrics/MethodLength:
+  Exclude:
+    - 'lib/japanese_names/splitter.rb'
+
 Metrics/LineLength:
   Enabled: false
 

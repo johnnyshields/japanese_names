@@ -20,11 +20,10 @@ module JapaneseNames
           # Public: The memoized dictionary instance.
           def store
             @store ||= JapaneseNames::Util::Kernel.deep_freeze(
-              File.open(filepath, 'r:utf-8').inject({}) do |hash, line|
+              File.open(filepath, 'r:utf-8').each_with_object({}) do |line, hash|
                 ary = line.chop.split('|')
                 hash[ary[0]] ||= []
                 hash[ary[0]] << ary
-                hash
               end
             )
           end

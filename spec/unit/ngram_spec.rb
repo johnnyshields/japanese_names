@@ -3,7 +3,6 @@
 require 'spec_helper'
 
 RSpec.describe JapaneseNames::Util::Ngram do
-
   describe '#ngram_partition' do
     it { expect(described_class.ngram_partition('abcd')).to eq [%w[ab cd], %w[abc d], %w[a bcd]] }
     it { expect(described_class.ngram_partition('abcde')).to eq [%w[ab cde], %w[abc de], %w[a bcde], %w[abcd e]] }

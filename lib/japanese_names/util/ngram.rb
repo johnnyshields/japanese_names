@@ -5,7 +5,6 @@ module JapaneseNames
     # Provides methods for parsing Japanese name strings.
     class Ngram
       class << self
-
         # Generates middle-out partition n-grams for a string
         def ngram_partition(str)
           size = str.size
@@ -25,7 +24,7 @@ module JapaneseNames
           last = size / 2
           ary << last
           (size - 2).times do |i|
-            last = last + (i+1)*(-1)**i
+            last += (i + 1) * (-1)**i
             ary << last
           end
           ary

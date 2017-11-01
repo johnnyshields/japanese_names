@@ -24,9 +24,8 @@ module JapaneseNames
       first_lhs_match = nil
       first_rhs_match = nil
       kanji_ngrams.each do |kanji_pair|
-
-        lhs_dict = dict.select{|d| d[0] == kanji_pair[0] }
-        rhs_dict = dict.select{|d| d[0] == kanji_pair[1] }
+        lhs_dict = dict.select { |d| d[0] == kanji_pair[0] }
+        rhs_dict = dict.select { |d| d[0] == kanji_pair[1] }
 
         lhs_match = detect_lhs(lhs_dict, kanji, kana)
         rhs_match = detect_rhs(rhs_dict, kanji, kana)
@@ -37,24 +36,27 @@ module JapaneseNames
         first_rhs_match ||= rhs_match
       end
 
+      # As a fallback, return single-sided match prioritizing surname match first
       first_lhs_match || first_rhs_match
     end
 
     private
 
     def detect_lhs(dict, kanji, kana)
-      dict_match = dict.select { |d| match_kana_lhs(d, kana) }.sort_by{ |m| m[1].size * -1 }.first
+      dict_match = dict.select { |d| match_kana_lhs(d, kana) }.sort_by { |m| m[1].size * -1 }.first
       if dict_match
         kana_match = match_kana_lhs(dict_match, kana)
-        return [[dict_match[0], Util::Ngram.mask_left(kanji, dict_match[0])], [kana_match, Util::Ngram.mask_left(kana, kana_match)]]
+        return [[dict_match[0], Util::Ngram.mask_left(kanji, dict_match[0])],
+                [kana_match, Util::Ngram.mask_left(kana, kana_match)]]
       end
     end
 
     def detect_rhs(dict, kanji, kana)
-      dict_match = dict.select { |d| match_kana_rhs(d, kana) }.sort_by{ |m| m[1].size * -1 }.first
+      dict_match = dict.select { |d| match_kana_rhs(d, kana) }.sort_by { |m| m[1].size * -1 }.first
       if dict_match
         kana_match = match_kana_rhs(dict_match, kana)
-        return [[Util::Ngram.mask_right(kanji, dict_match[0]), dict_match[0]], [Util::Ngram.mask_right(kana, kana_match), kana_match]]
+        return [[Util::Ngram.mask_right(kanji, dict_match[0]), dict_match[0]],
+                [Util::Ngram.mask_right(kana, kana_match), kana_match]]
       end
     end
 
