@@ -13,17 +13,17 @@ RSpec.describe JapaneseNames::Util::Ngram do
     it { expect(described_class.index_partition('abcde', 2)).to eq %w[ab cde] }
   end
 
-  describe '#spiral_partion_indexes' do
-    it { expect(described_class.spiral_partion_indexes(0)).to eq [0] }
-    it { expect(described_class.spiral_partion_indexes(1)).to eq [0] }
-    it { expect(described_class.spiral_partion_indexes(2)).to eq [1] }
-    it { expect(described_class.spiral_partion_indexes(3)).to eq [1, 2] }
-    it { expect(described_class.spiral_partion_indexes(4)).to eq [2, 3, 1] }
-    it { expect(described_class.spiral_partion_indexes(5)).to eq [2, 3, 1, 4] }
-    it { expect(described_class.spiral_partion_indexes(6)).to eq [3, 4, 2, 5, 1] }
-    it { expect(described_class.spiral_partion_indexes(7)).to eq [3, 4, 2, 5, 1, 6] }
-    it { expect(described_class.spiral_partion_indexes(8)).to eq [4, 5, 3, 6, 2, 7, 1] }
-    it { expect(described_class.spiral_partion_indexes(9)).to eq [4, 5, 3, 6, 2, 7, 1, 8] }
+  describe '#spiral_partition_indexes' do
+    it { expect(described_class.spiral_partition_indexes(0)).to eq [0] }
+    it { expect(described_class.spiral_partition_indexes(1)).to eq [0] }
+    it { expect(described_class.spiral_partition_indexes(2)).to eq [1] }
+    it { expect(described_class.spiral_partition_indexes(3)).to eq [1, 2] }
+    it { expect(described_class.spiral_partition_indexes(4)).to eq [2, 3, 1] }
+    it { expect(described_class.spiral_partition_indexes(5)).to eq [2, 3, 1, 4] }
+    it { expect(described_class.spiral_partition_indexes(6)).to eq [3, 4, 2, 5, 1] }
+    it { expect(described_class.spiral_partition_indexes(7)).to eq [3, 4, 2, 5, 1, 6] }
+    it { expect(described_class.spiral_partition_indexes(8)).to eq [4, 5, 3, 6, 2, 7, 1] }
+    it { expect(described_class.spiral_partition_indexes(9)).to eq [4, 5, 3, 6, 2, 7, 1, 8] }
   end
 
   describe '#mask_left' do

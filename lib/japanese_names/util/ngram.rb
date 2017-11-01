@@ -9,7 +9,7 @@ module JapaneseNames
         # Generates middle-out partition n-grams for a string
         def ngram_partition(str)
           size = str.size
-          spiral_partion_indexes(size).map do |i|
+          spiral_partition_indexes(size).map do |i|
             index_partition(str, i)
           end
         end
@@ -20,7 +20,7 @@ module JapaneseNames
         end
 
         # Lists middle-out partition points for a given string length
-        def spiral_partion_indexes(size)
+        def spiral_partition_indexes(size)
           ary = []
           last = size / 2
           ary << last
