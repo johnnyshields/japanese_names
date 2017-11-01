@@ -1,4 +1,6 @@
-$:.push File.expand_path('../lib', __FILE__)
+# frozen_string_literal: true
+
+$LOAD_PATH.push File.expand_path('../lib', __FILE__)
 require 'japanese_names/version'
 
 Gem::Specification.new do |s|
@@ -11,11 +13,11 @@ Gem::Specification.new do |s|
   s.description = 'Japanese name parser based on ENAMDICT'
   s.email       = 'johnny.shields@gmail.com'
 
-  s.files         = Dir.glob('{lib,bin}/**/*') + %w(LICENSE README.md)
+  s.files         = Dir.glob('{lib,bin}/**/*') + %w[LICENSE README.md]
   s.test_files    = Dir.glob('{perf,spec}/**/*')
   s.require_paths = ['lib']
 
-  s.post_install_message = File.read('UPGRADING') if File.exists?('UPGRADING')
+  s.post_install_message = File.read('UPGRADING') if File.exist?('UPGRADING')
 
   s.add_dependency 'moji', '>= 1.6'
   s.add_development_dependency 'rake'

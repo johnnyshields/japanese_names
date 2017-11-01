@@ -1,7 +1,8 @@
-namespace :enamdict do
+# frozen_string_literal: true
 
+namespace :enamdict do
   desc 'Downloads and compacts the ENAMDICT file'
-  task refresh: %w(download minify)
+  task refresh: %w[download minify]
 
   desc 'Downloads and extracts ENAMDICT file from ftp.monash.edu.au to /tmp/enamdict'
   task :download do
@@ -38,14 +39,15 @@ namespace :enamdict do
     puts 'Minifying ENAMDICT...'
 
     # TODO: load this from main library
-    name_types = %w(s p u g f m)
+    name_types = %w[s p u g f m]
 
-    i, j = 0, 0
+    i = 0
+    j = 0
     out = File.open('bin/enamdict.min', 'w:utf-8')
     File.open('tmp/enamdict', 'r:euc-jp') do |f|
       f.gets # skip header
-      while(line = f.gets) != nil
-        data = line.scan(/^(.+?) (?:\[(.+?)\] )?\/\((.+?)\).+\/$/)[0]
+      while (line = f.gets) != nil
+        data = line.scan(%r{^(.+?) (?:\[(.+?)\] )?/\((.+?)\).+/$})[0]
         data[1] ||= data[0]
         if (data[2].split(',') & name_types).any?
           out.puts(data.join('|'))

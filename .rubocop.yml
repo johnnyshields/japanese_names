@@ -1,0 +1,57 @@
+AllCops:
+  TargetRubyVersion: 2.4
+
+Bundler/OrderedGems:
+  Enabled: false
+
+Gemspec/OrderedDependencies:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/BlockLength:
+  Exclude:
+    - 'Gemfile'
+    - 'spec/**/*'
+    - '**/*.gemspec'
+    - '**/*.rake'
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Metrics/LineLength:
+  Enabled: false
+
+Metrics/PerceivedComplexity:
+  Enabled: false
+
+StringLiterals:
+  Enabled: false
+
+Style/Alias:
+  EnforcedStyle: prefer_alias
+
+Style/AsciiComments:
+  Enabled: false
+
+Style/EmptyMethod:
+  EnforcedStyle: expanded
+
+Style/GuardClause:
+  Enabled: false
+
+Style/MutableConstant:
+  Enabled: false
+
+Style/NilComparison:
+  Enabled: false
+
+Style/NonNilCheck:
+  Enabled: false
+
+Style/RegexpLiteral:
+  EnforcedStyle: mixed
+
+Style/SafeNavigation:
+  Enabled: false

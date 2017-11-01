@@ -1,8 +1,8 @@
-module JapaneseNames
+# frozen_string_literal: true
 
+module JapaneseNames
   # Provides methods to split a full Japanese name strings into surname and given name.
   class Splitter
-
     # Given a kanji and kana representation of a name splits into to family/given names.
     #
     # The choice to prioritize family name is arbitrary. Further analysis is needed
@@ -16,27 +16,29 @@ module JapaneseNames
 
     def split_giv(kanji, kana)
       return nil unless kanji && kana
-      kanji, kana = kanji.strip, kana.strip
+      kanji = kanji.strip
+      kana = kana.strip
       dict = finder.find(kanji: Util::Ngram.ngram_right(kanji))
-      dict.sort!{|x,y| y[0].size <=> x[0].size}
+      dict.sort! { |x, y| y[0].size <=> x[0].size }
       kana_match = nil
-      if match = dict.detect{|m| kana_match = kana[/#{hk m[1]}\z/]}
-        return [[Util::Ngram.mask_right(kanji, match[0]), match[0]],[Util::Ngram.mask_right(kana, kana_match), kana_match]]
+      if (match = dict.detect { |m| (kana_match = kana[/#{hk m[1]}\z/]) })
+        return [[Util::Ngram.mask_right(kanji, match[0]), match[0]], [Util::Ngram.mask_right(kana, kana_match), kana_match]]
       end
     end
-    alias :split_given :split_giv
+    alias split_given split_giv
 
     def split_sur(kanji, kana)
       return nil unless kanji && kana
-      kanji, kana = kanji.strip, kana.strip
+      kanji = kanji.strip
+      kana = kana.strip
       dict = finder.find(kanji: Util::Ngram.ngram_left(kanji))
-      dict.sort!{|x,y| y[0].size <=> x[0].size}
+      dict.sort! { |x, y| y[0].size <=> x[0].size }
       kana_match = nil
-      if match = dict.detect{|m| kana_match = kana[/\A#{hk m[1]}/]}
-        return [[match[0], Util::Ngram.mask_left(kanji, match[0])],[kana_match, Util::Ngram.mask_left(kana, kana_match)]]
+      if (match = dict.detect { |m| (kana_match = kana[/\A#{hk m[1]}/]) })
+        return [[match[0], Util::Ngram.mask_left(kanji, match[0])], [kana_match, Util::Ngram.mask_left(kana, kana_match)]]
       end
     end
-    alias :split_surname :split_sur
+    alias split_surname split_sur
 
     # TODO: add option to strip honorific '様'
     # TODO: add option to infer sex (0 = unknown, 1 = male, 2 = female as per ISO/IEC 5218)

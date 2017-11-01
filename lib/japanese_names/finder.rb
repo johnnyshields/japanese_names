@@ -1,13 +1,13 @@
-module JapaneseNames
+# frozen_string_literal: true
 
+module JapaneseNames
   # Query interface for ENAMDICT
   class Finder
-
     # Hash opts
     # - kanji: String kanji to match
     # - kana:  String kana to match
     # - kanji: Array<Symbol> ENAMDICT flags to match
-    def find(opts={})
+    def find(opts = {})
       backend.find(opts)
     end
 
