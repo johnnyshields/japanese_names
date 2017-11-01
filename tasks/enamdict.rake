@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 namespace :enamdict do
+  TMP_FILE = 'tmp/enamdict'.freeze
+
   desc 'Downloads and compacts the ENAMDICT file'
   task refresh: %w[download minify]
 
@@ -13,9 +15,8 @@ namespace :enamdict do
     puts 'Downloading ENAMDICT...'
 
     FileUtils.mkdir_p 'tmp'
-    uri = 'http://ftp.monash.edu.au/pub/nihongo/enamdict.gz'
-    loc = 'tmp/enamdict'
-    f = File.open(loc, 'w')
+    uri = 'http://ftp.monash.edu/pub/nihongo/enamdict.gz'
+    f = File.open(TMP_FILE, 'w')
     f.write(Zlib::GzipReader.open(open(uri)).read)
     f.close
 
@@ -40,16 +41,19 @@ namespace :enamdict do
 
     # TODO: load this from main library
     name_types = %w[s p u g f m]
+    skip_types = %w[h]
 
     i = 0
     j = 0
     out = File.open('bin/enamdict.min', 'w:utf-8')
-    File.open('tmp/enamdict', 'r:euc-jp') do |f|
+    File.open(TMP_FILE, 'r:euc-jp') do |f|
       f.gets # skip header
       while (line = f.gets) != nil
         data = line.scan(%r{^(.+?) (?:\[(.+?)\] )?/\((.+?)\).+/$})[0]
+        next unless data
         data[1] ||= data[0]
-        if (data[2].split(',') & name_types).any?
+        data_types = data[2].split(',')
+        if (data_types & name_types).any? && !(data_types & skip_types).any? && !(%w[p u].include?(data[2]) && data[0].encode('utf-8') =~ /\p{Katakana}/)
           out.puts(data.join('|'))
           j += 1
         end

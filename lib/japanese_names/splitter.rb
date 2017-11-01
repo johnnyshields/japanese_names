@@ -15,6 +15,12 @@ module JapaneseNames
       kanji = kanji.strip
       kana  = kana.strip
 
+      # Short-circuit: Return last name if it can match the full string
+      if kanji.size <= 3 && kana.size <= 4
+        full_match = finder.find(kanji).detect { |d| d[0] == kanji && d[1] =~ /\A#{hk kana}\z/ }
+        return [[kanji, nil], [kana, nil]] if full_match
+      end
+
       # Partition kanji into candidate n-grams
       kanji_ngrams = Util::Ngram.ngram_partition(kanji)
 

@@ -9,14 +9,23 @@ RSpec.describe JapaneseNames::Splitter do
     config = YAML.load_file(File.join(File.dirname(__FILE__), '..', 'config.yml'))
     skip_list = config[:skip]
 
+    config[:last_names] + config[:first_names].each do |name|
+      kanji, kana = name.split(' ')
+      next if skip_list.index(kanji)
+
+      it "should match #{kanji} #{kana}" do
+        result = subject.split(kanji, kana)
+        expect(result).to eq [[kanji, nil], [kana, nil]]
+      end
+    end
+
     config[:last_names].each do |last_name|
       config[:first_names].each do |first_name|
         kanji_fam, kana_fam = last_name.split(' ')
         kanji_giv, kana_giv = first_name.split(' ')
+        next if skip_list.index([kanji_fam, kanji_giv].join(' '))
 
-        next if skip_list.index("#{kanji_fam} #{kanji_giv}")
-
-        it "should parse #{kanji_fam + kanji_giv} #{kana_fam + kana_giv}" do
+        it "should split #{kanji_fam + kanji_giv} #{kana_fam + kana_giv}" do
           result = subject.split(kanji_fam + kanji_giv, kana_fam + kana_giv)
           expect(result).to eq [[kanji_fam, kanji_giv], [kana_fam, kana_giv]]
         end
