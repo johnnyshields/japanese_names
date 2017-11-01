@@ -6,10 +6,26 @@ module JapaneseNames
       # In-memory store of the Enamdict dictionary
       class Store
         class << self
+          # Public: Finds kanji and/or kana regex strings in the dictionary via
+          # a structured query interface.
+          #
+          # kanji - (String, Array) Value or array of values of the kanji name to match.
+          #
+          # Returns the dict entries as an Array of Arrays [[kanji, kana, flags], ...]
+          def find(kanji)
+            kanji = Array(kanji)
+            store.values_at(*kanji).reject(&:nil?).inject(&:+) || []
+          end
+
           # Public: The memoized dictionary instance.
           def store
             @store ||= JapaneseNames::Util::Kernel.deep_freeze(
-              File.open(filepath, 'r:utf-8').map { |line| line.chop.split('|') }
+              File.open(filepath, 'r:utf-8').inject({}) do |hash, line|
+                ary = line.chop.split('|')
+                hash[ary[0]] ||= []
+                hash[ary[0]] << ary
+                hash
+              end
             )
           end
 

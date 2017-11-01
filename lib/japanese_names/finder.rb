@@ -7,15 +7,15 @@ module JapaneseNames
     # - kanji: String kanji to match
     # - kana:  String kana to match
     # - kanji: Array<Symbol> ENAMDICT flags to match
-    def find(opts = {})
-      backend.find(opts)
+    def find(*args)
+      backend.find(*args)
     end
 
     private
 
     # Internal: Builds regex criteria for name.
     def backend
-      ::JapaneseNames::Backend::Memory::Finder
+      ::JapaneseNames::Backend::Memory::Store
     end
   end
 end

@@ -39,13 +39,15 @@ Note that romaji data has been removed from our `enamdict.min` file in the compr
 
 ### Splitter#split
 
-Currently the main method is `split` which, given a kanji and kana representation of a name splits
+The main method is `split` which, given a kanji and kana representation of a name splits
 into to family/given names.
 
    ```ruby
    splitter = JapaneseNames::Splitter.new
    splitter.split('堺雅美', 'さかいマサミ')  #=> [['堺', '雅美'], ['さかい', 'マサミ']]
    ```
+
+Over a test corpus of over 22,000 names it yields a failure rate of less than 0.5%.
 
 The logic is as follows:
 

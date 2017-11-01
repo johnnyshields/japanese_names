@@ -19,14 +19,14 @@ module JapaneseNames
       kanji_ngrams = Util::Ngram.ngram_partition(kanji)
 
       # Find all possible matches of all kanji n-grams in dictionary
-      dict = finder.find(kanji: kanji_ngrams.flatten.uniq)
+      dict = finder.find(kanji_ngrams.flatten.uniq)
 
       first_lhs_match = nil
       first_rhs_match = nil
       kanji_ngrams.each do |kanji_pair|
 
-        lhs_dict = dict.select{|d| d[0] == kanji_pair[0]}
-        rhs_dict = dict.select{|d| d[0] == kanji_pair[1]}
+        lhs_dict = dict.select{|d| d[0] == kanji_pair[0] }
+        rhs_dict = dict.select{|d| d[0] == kanji_pair[1] }
 
         lhs_match = detect_lhs(lhs_dict, kanji, kana)
         rhs_match = detect_rhs(rhs_dict, kanji, kana)

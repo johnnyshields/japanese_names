@@ -11,7 +11,6 @@ require 'japanese_names/splitter'
 require 'japanese_names/util/kernel'
 require 'japanese_names/util/ngram'
 require 'japanese_names/backend/memory/store'
-require 'japanese_names/backend/memory/finder'
 
 # Root namespace for library
 module JapaneseNames
