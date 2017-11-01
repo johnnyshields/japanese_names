@@ -9,9 +9,7 @@ module JapaneseNames
           # Public: The memoized dictionary instance.
           def store
             @store ||= JapaneseNames::Util::Kernel.deep_freeze(
-              File.open(filepath, 'r:utf-8').map do |line|
-                line.chop.split('|').map(&:freeze).freeze
-              end
+              File.open(filepath, 'r:utf-8').map { |line| line.chop.split('|') }
             )
           end
 

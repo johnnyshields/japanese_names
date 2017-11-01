@@ -11,39 +11,60 @@ module JapaneseNames
     # Returns Array [[kanji_fam, kanji_giv], [kana_fam, kana_giv]] if there was a match.
     # Returns nil if there was no match.
     def split(kanji, kana)
-      split_surname(kanji, kana) || split_given(kanji, kana)
-    end
-
-    def split_giv(kanji, kana)
       return nil unless kanji && kana
       kanji = kanji.strip
-      kana = kana.strip
-      dict = finder.find(kanji: Util::Ngram.ngram_right(kanji))
-      dict.sort! { |x, y| y[0].size <=> x[0].size }
-      kana_match = nil
-      if (match = dict.detect { |m| (kana_match = kana[/#{hk m[1]}\z/]) })
-        return [[Util::Ngram.mask_right(kanji, match[0]), match[0]], [Util::Ngram.mask_right(kana, kana_match), kana_match]]
-      end
-    end
-    alias split_given split_giv
+      kana  = kana.strip
 
-    def split_sur(kanji, kana)
-      return nil unless kanji && kana
-      kanji = kanji.strip
-      kana = kana.strip
-      dict = finder.find(kanji: Util::Ngram.ngram_left(kanji))
-      dict.sort! { |x, y| y[0].size <=> x[0].size }
-      kana_match = nil
-      if (match = dict.detect { |m| (kana_match = kana[/\A#{hk m[1]}/]) })
-        return [[match[0], Util::Ngram.mask_left(kanji, match[0])], [kana_match, Util::Ngram.mask_left(kana, kana_match)]]
-      end
-    end
-    alias split_surname split_sur
+      # Partition kanji into candidate n-grams
+      kanji_ngrams = Util::Ngram.ngram_partition(kanji)
 
-    # TODO: add option to strip honorific '様'
-    # TODO: add option to infer sex (0 = unknown, 1 = male, 2 = female as per ISO/IEC 5218)
+      # Find all possible matches of all kanji n-grams in dictionary
+      dict = finder.find(kanji: kanji_ngrams.flatten.uniq)
+
+      first_lhs_match = nil
+      first_rhs_match = nil
+      kanji_ngrams.each do |kanji_pair|
+
+        lhs_dict = dict.select{|d| d[0] == kanji_pair[0]}
+        rhs_dict = dict.select{|d| d[0] == kanji_pair[1]}
+
+        lhs_match = detect_lhs(lhs_dict, kanji, kana)
+        rhs_match = detect_rhs(rhs_dict, kanji, kana)
+
+        return lhs_match if lhs_match && lhs_match == rhs_match
+
+        first_lhs_match ||= lhs_match
+        first_rhs_match ||= rhs_match
+      end
+
+      first_lhs_match || first_rhs_match
+    end
 
     private
+
+    def detect_lhs(dict, kanji, kana)
+      dict_match = dict.select { |d| match_kana_lhs(d, kana) }.sort_by{ |m| m[1].size * -1 }.first
+      if dict_match
+        kana_match = match_kana_lhs(dict_match, kana)
+        return [[dict_match[0], Util::Ngram.mask_left(kanji, dict_match[0])], [kana_match, Util::Ngram.mask_left(kana, kana_match)]]
+      end
+    end
+
+    def detect_rhs(dict, kanji, kana)
+      dict_match = dict.select { |d| match_kana_rhs(d, kana) }.sort_by{ |m| m[1].size * -1 }.first
+      if dict_match
+        kana_match = match_kana_rhs(dict_match, kana)
+        return [[Util::Ngram.mask_right(kanji, dict_match[0]), dict_match[0]], [Util::Ngram.mask_right(kana, kana_match), kana_match]]
+      end
+    end
+
+    def match_kana_lhs(dict, kana)
+      kana[/\A#{hk dict[1]}/]
+    end
+
+    def match_kana_rhs(dict, kana)
+      kana[/#{hk dict[1]}\z/]
+    end
 
     # Returns a regex string which matches both hiragana and katakana variations of a String.
     def hk(str)

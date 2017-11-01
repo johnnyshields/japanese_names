@@ -6,26 +6,17 @@ RSpec.describe JapaneseNames::Splitter do
   subject { described_class.new }
 
   describe '#split' do
-    [%w[上原 望 ウエハラ ノゾミ],
-     %w[樋口 知美 ヒグチ ともみ],
-     %w[堺 雅美 さかい マサミ],
-     %w[中村 幸子 ナカムラ サチコ],
-     %w[秋保 郁子 アキホ いくこ],
-     %w[光野 亜佐子 ミツノ アサコ],
-     %w[熊澤 貴子 クマザワ タカコ]].each do |kanji_fam, kanji_giv, kana_fam, kana_giv|
-      it "should parse #{kanji_fam + kanji_giv} #{kana_fam + kana_giv}" do
-        result = subject.split(kanji_fam + kanji_giv, kana_fam + kana_giv)
-        expect(result).to eq [[kanji_fam, kanji_giv], [kana_fam, kana_giv]]
-      end
+    config = YAML.load_file(File.join(File.dirname(__FILE__), '..', 'config.yml'))
 
-      it "should parse #{kanji_fam + kanji_giv} #{kana_fam + kana_giv} by given name" do
-        result = subject.split_giv(kanji_fam + kanji_giv, kana_fam + kana_giv)
-        expect(result).to eq [[kanji_fam, kanji_giv], [kana_fam, kana_giv]]
-      end
+    config[:last_names].each do |last_name|
+      config[:first_names].each do |first_name|
+        kanji_fam, kana_fam = last_name.split(' ')
+        kanji_giv, kana_giv = first_name.split(' ')
 
-      it "should parse #{kanji_fam + kanji_giv} #{kana_fam + kana_giv} by family name" do
-        result = subject.split_sur(kanji_fam + kanji_giv, kana_fam + kana_giv)
-        expect(result).to eq [[kanji_fam, kanji_giv], [kana_fam, kana_giv]]
+        it "should parse #{kanji_fam + kanji_giv} #{kana_fam + kana_giv}" do
+          result = subject.split(kanji_fam + kanji_giv, kana_fam + kana_giv)
+          expect(result).to eq [[kanji_fam, kanji_giv], [kana_fam, kana_giv]]
+        end
       end
     end
 
@@ -38,8 +29,6 @@ RSpec.describe JapaneseNames::Splitter do
 
     it 'should strip leading/trailing whitespace' do
       expect(subject.split(' 上原望 ', ' ウエハラノゾミ ')).to eq [%w[上原 望], %w[ウエハラ ノゾミ]]
-      expect(subject.split_giv(' 上原望 ', ' ウエハラノゾミ ')).to eq [%w[上原 望], %w[ウエハラ ノゾミ]]
-      expect(subject.split_sur(' 上原望 ', ' ウエハラノゾミ ')).to eq [%w[上原 望], %w[ウエハラ ノゾミ]]
     end
 
     it 'should return nil for nil input' do

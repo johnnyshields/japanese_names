@@ -49,34 +49,42 @@ into to family/given names.
 
 The logic is as follows:
 
-* Step 1: Split kanji name into possible surname sub-strings
+* Step 1: Split kanji name into possible sub-strings from the middle out-ward.
 
    ```
    上原亜沙子 => 
 
-   上原亜沙子
-   上原亜沙
-   上原亜
-   上原
-   上
+   上原     亜沙子
+   上原亜     沙子
+   上     原亜沙子
+   上原亜沙     子
    ```
 
 * Step 2: Lookup possible kana matches in dictionary (done in a single pass)
 
    ```
-   上原亜沙子 => X
-   上原亜沙　 => X
-   上原亜　　 => X
    上原　　　 => かみはら　かみばら　うえはら うえばら...
+   亜沙子    => あさこ
+   上原亜　　 => X
+   亜沙　    => さこ
    上　　　　 => かみ　うえ ...
+   原亜沙子　 => X
+   ...
    ```
 
-* Step 3: Compare kana lookups versus kana name and detect first match (starting from longest candidate string)
+* Step 3: Compare kana lookups versus kana name and detect first match.
+If the kana string can be matched from both sides and yield the same result,
+we will return that result immediately. Otherwise we return the first single sided match
+found.
 
    ```
    うえはらあさこ contains かみはら ? => X
    うえはらあさこ contains かみばら ? => X
    うえはらあさこ contains うえはら ? => YES! [うえはら]あさこ
+   
+   うえはらあさこ contains あさこ ? => YES! うえはら[あさこ]
+   
+   Double-sided match found! ==> Return immediately
    ```
 
 * Step 4: If match found, split names accordingly
@@ -86,22 +94,7 @@ The logic is as follows:
    [うえはら]あさこ => うえはら あさこ
    ```
 
-* Step 5: If match not found, repeat steps 1-4 in reverse for given name:
-
-   ```
-   上原亜沙子 => 
-
-   上原亜沙子 => X
-   　原亜沙子 => X
-   　　亜沙子 => あさこ
-   　　　沙子 => さこ
-   　　　　子 => こ
-
-   上原[亜沙子]  => 上原 亜沙子
-   うえはら[あさこ] => うえはら あさこ
-   ```
-
-* Step 6: If match still not found, return `nil`
+* Step 5: If match still not found, return `nil`
 
 
 ## Rake Tasks
